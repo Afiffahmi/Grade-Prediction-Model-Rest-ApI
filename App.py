@@ -1,45 +1,53 @@
-from flask import Flask, request, redirect
-from flask_restful import Resource, Api
-from flask_cors import CORS
-import os
+from flask import Flask
+from flask_restful import Api, Resource, reqparse
+import numpy as np
+import pickle
+
+APP = Flask(__name__)
+API = Api(APP)
+
+ ##loading the model from the saved file
+pkl_filename = "model.pkl"
+with open(pkl_filename, 'rb') as f_in:
+        model = pickle.load(f_in)
 
 
-app = Flask(__name__)
-cors = CORS(app, resources={r"*": {"origins": "*"}})
-api = Api(app)
+class Predict(Resource):
 
-class Test(Resource):
-    def get(self):
-        return 'Welcome to, Test App API!'
+    @staticmethod
+    def post():
+        parser = reqparse.RequestParser()
+        parser.add_argument('test1')
+        parser.add_argument('test2')
+        parser.add_argument('assignment1')
+        parser.add_argument('assignment2')
+        parser.add_argument('quiz1')
+        parser.add_argument('carrymark')
+        parser.add_argument('taking_notes')
+        parser.add_argument('attendance')
+        parser.add_argument('listening')
 
-    def post(self):
-        try:
-            value = request.get_json()
-            if(value):
-                return {'Post Values': value}, 201
+        args = parser.parse_args()  # creates dict
 
-            return {"error":"Invalid format."}
+        X_new = np.fromiter(args.values(), dtype=float)  # convert input to array
 
-        except Exception as error:
-            return {'error': error}
+        out = {'Prediction': model.predict([X_new])[0]}
 
-class GetPredictionOutput(Resource):
-    def get(self):
-        return {"error":"Invalid Method."}
+        if out['Prediction'] >= 1 and out['Prediction'] < 2:
+            out['Prediction'] = 'D F' 
+        elif out['Prediction'] >= 2 and out['Prediction'] < 3:
+            out['Prediction'] = 'C D'
+        elif out['Prediction'] >= 3 and out['Prediction'] < 4:
+            out['Prediction'] = 'B C'
+        elif out['Prediction'] >= 4 and out['Prediction'] < 5:
+            out['Prediction'] = 'A B'
+        elif out['Prediction'] == 5:
+            out['Prediction'] = 'A'
 
-    def post(self):
-        try:
-            data = request.get_json()
-            predict = prediction.predict_mpg(data)
-            predictOutput = predict
-            return {'predict':predictOutput}
+        return out['Prediction'], 200
 
-        except Exception as error:
-            return {'error': error}
 
-api.add_resource(Test,'/')
-api.add_resource(GetPredictionOutput,'/getPredictionOutput')
+API.add_resource(Predict, '/predict')
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+if __name__ == '__main__':
+    APP.run(debug=True, port='1080')
