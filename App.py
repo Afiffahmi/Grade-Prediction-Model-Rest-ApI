@@ -1,9 +1,12 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Api, Resource, reqparse
 import numpy as np
 import pickle
+from flask_cors import CORS
+
 
 APP = Flask(__name__)
+CORS(APP)
 API = Api(APP)
 
  ##loading the model from the saved file
@@ -33,21 +36,25 @@ class Predict(Resource):
 
         out = {'Prediction': model.predict([X_new])[0]}
 
-        if out['Prediction'] >= 1 and out['Prediction'] < 2:
-            out['Prediction'] = 'D F' 
-        elif out['Prediction'] >= 2 and out['Prediction'] < 3:
-            out['Prediction'] = 'C D'
-        elif out['Prediction'] >= 3 and out['Prediction'] < 4:
-            out['Prediction'] = 'B C'
-        elif out['Prediction'] >= 4 and out['Prediction'] < 5:
-            out['Prediction'] = 'A B'
-        elif out['Prediction'] == 5:
+        if 0 <= out['Prediction'] < 0.5:
+            out['Prediction'] = 'F' 
+        elif 0.5 <= out['Prediction'] < 1.5:
+            out['Prediction'] = 'D' 
+        elif 1.5 <= out['Prediction'] < 2.5:
+            out['Prediction'] = 'D'
+        elif 2.5 <= out['Prediction'] < 3.5:
+            out['Prediction'] = 'B'
+        elif 3.5 <= out['Prediction'] < 4.5:
+            out['Prediction'] = 'B'
+        elif 4.5 <= out['Prediction'] < 5:
             out['Prediction'] = 'A'
 
-        return out['Prediction'], 200
+
+        return ({'Prediction': out['Prediction']}), 200
 
 
 API.add_resource(Predict, '/predict')
 
 if __name__ == '__main__':
+
     APP.run(debug=True, port='1080')
