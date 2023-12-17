@@ -10,7 +10,7 @@ CORS(APP)
 API = Api(APP)
 
  ##loading the model from the saved file
-pkl_filename = "model.pkl"
+pkl_filename = "knn_model.pkl"
 with open(pkl_filename, 'rb') as f_in:
         model = pickle.load(f_in)
 
@@ -26,9 +26,7 @@ class Predict(Resource):
         parser.add_argument('assignment2')
         parser.add_argument('quiz1')
         parser.add_argument('carrymark')
-        parser.add_argument('taking_notes')
-        parser.add_argument('attendance')
-        parser.add_argument('listening')
+
 
         args = parser.parse_args()  # creates dict
 
@@ -50,7 +48,7 @@ class Predict(Resource):
             out['Prediction'] = 'A'
 
 
-        return ({'Prediction': out['Prediction']}), 200
+        return ({'Prediction': out}), 200
 
 
 API.add_resource(Predict, '/predict')

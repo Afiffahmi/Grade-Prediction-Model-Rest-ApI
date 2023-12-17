@@ -21,9 +21,7 @@ assignment2 = []
 quiz1 = []
 grades = []
 carrymark = []
-taking_notes = []
-attendance = []
-listening = []
+
 
 # Generate random data
 for _ in range(num_rows):
@@ -32,24 +30,21 @@ for _ in range(num_rows):
     assignment1_score = random.uniform(1, 10)
     assignment2_score = random.uniform(1, 15)
     quiz1_score = random.uniform(1, 5)
-    taking_notes.append(random.randint(1, 3))
-    attendance.append(random.randint(1, 3))
-    listening.append(random.randint(1, 3))
 
     # Calculate the total score
     total_score = test1_score + test2_score + assignment1_score + assignment2_score + quiz1_score
 
     # Randomize the grade
     if 40 <= total_score <= 50:
-        grade = random.choice(['A', 'B'])
+        grade = random.choice(['5', '4'])
     elif 29 <= total_score < 40:
-        grade = random.choice(['A', 'B'])
+        grade = random.choice(['5', '4'])
     elif 20 <= total_score < 29:
-        grade = random.choice(['B', 'C', 'D'])
+        grade = random.choice(['4', '3', '2'])
     elif 10 <= total_score < 20:
-        grade = random.choice(['C', 'D', 'F'])
+        grade = random.choice(['3', '2', '1'])
     else:
-        grade = 'F'
+        grade = '1'
 
     test1.append(test1_score)
     test2.append(test2_score)
@@ -68,13 +63,7 @@ data = pd.DataFrame({
     'quiz1': quiz1,
     'grade': grades,
     'carrymark': carrymark,
-    'taking_notes': taking_notes,
-    'attendance': attendance,
-    'listening': listening
 })
-
-
-
 
 # Save the DataFrame to a CSV file
 data.to_csv('synthetic_data.csv', index=False)
