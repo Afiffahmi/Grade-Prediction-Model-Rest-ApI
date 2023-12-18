@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from flask_restful import Api, Resource, reqparse
+from flask_restful import Api, Resource, reqparse, request
 import numpy as np
 import pickle
 from flask_cors import CORS
@@ -16,50 +16,53 @@ with open(pkl_filename, 'rb') as f_in:
 
 
 class Predict(Resource):
-
     @staticmethod
     def post():
-        parser = reqparse.RequestParser()
-        parser.add_argument('test1')
-        parser.add_argument('test2')
-        parser.add_argument('assignment1')
-        parser.add_argument('assignment2')
-        parser.add_argument('quiz1')
-        parser.add_argument('carrymark')
+        data = request.get_json(force=True)  # Get data from POST request
 
+        predictions = []
+        for entry in data:
+            X_new = np.fromiter(entry.values(), dtype=float)  # convert input to array
 
-        args = parser.parse_args()  # creates dict
+            # Predict for each entry
+            prediction_value = model.predict([X_new])[0]
 
-        X_new = np.fromiter(args.values(), dtype=float)  # convert input to array
+            # Map prediction value to grade
+            grade = map_prediction_to_grade(prediction_value)
 
-        out = {'Prediction': model.predict([X_new])[0]}
+            predictions.append({'Input': entry, 'Prediction': grade})  # Include input data in response
 
-        if 0 <= out['Prediction'] < 0.5:
-            out['Prediction'] = 'F' 
-        elif 0.5 <= out['Prediction'] < 1.0:
-            out['Prediction'] = 'F+' 
-        elif 1.0 <= out['Prediction'] < 1.5:
-            out['Prediction'] = 'D-' 
-        elif 1.5 <= out['Prediction'] < 2.0:
-            out['Prediction'] = 'D' 
-        elif 2.0 <= out['Prediction'] < 2.5:
-            out['Prediction'] = 'D+' 
-        elif 2.5 <= out['Prediction'] < 3.0:
-            out['Prediction'] = 'C-' 
-        elif 3.0 <= out['Prediction'] < 3.5:
-            out['Prediction'] = 'C' 
-        elif 3.5 <= out['Prediction'] < 4.0:
-            out['Prediction'] = 'C+' 
-        elif 4.0 <= out['Prediction'] < 4.5:
-            out['Prediction'] = 'B-' 
-        elif 4.5 <= out['Prediction'] < 5.0:
-            out['Prediction'] = 'B' 
-        elif out['Prediction'] == 5.0:
-            out['Prediction'] = 'A'
+        return {'Predictions': predictions}, 200
 
+def map_prediction_to_grade(prediction):
+        if 0 <= prediction < 0.5:
+            return 'F' 
+        elif 0.5 <= prediction < 1.0:
+            return 'F+' 
+        elif 1.0 <= prediction < 1.3:
+            return 'D-' 
+        elif 1.3 <= prediction < 1.7:
+            return 'D' 
+        elif 1.7 <= prediction < 2.0:
+            return 'D+' 
+        elif 2.0 <= prediction < 2.3:
+            return 'C-' 
+        elif 2.3 <= prediction < 2.7:
+            return 'C' 
+        elif 2.7 <= prediction < 3.0:
+            return 'C+' 
+        elif 3.0 <= prediction < 3.3:
+            return 'B-' 
+        elif 3.3 <= prediction < 3.7:
+            return 'B' 
+        elif 3.7 <= prediction < 4.0:
+            return 'B+' 
+        elif 4.0 <= prediction < 4.3:
+            return 'A-' 
+        elif prediction >= 4.3:
+            return 'A'
 
-
-        return ({'Prediction': out['Prediction']}), 200
+     
 
 
 API.add_resource(Predict, '/predict')
