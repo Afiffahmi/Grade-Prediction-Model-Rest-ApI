@@ -34,17 +34,35 @@ for _ in range(num_rows):
     # Calculate the total score
     total_score = test1_score + test2_score + assignment1_score + assignment2_score + quiz1_score
 
-    # Randomize the grade
-    if 40 <= total_score <= 50:
-        grade = random.choice(['5', '4'])
-    elif 29 <= total_score < 40:
-        grade = random.choice(['5', '4'])
-    elif 20 <= total_score < 29:
-        grade = random.choice(['4', '3', '2'])
-    elif 10 <= total_score < 20:
-        grade = random.choice(['3', '2', '1'])
+    if 45 <= total_score <= 50:
+        grade = 5.0
+    elif 42 <= total_score < 45:
+        grade = 4.7
+    elif 39 <= total_score < 42:
+        grade = 4.4
+    elif 36 <= total_score < 39:
+        grade = 4.1
+    elif 33 <= total_score < 36:
+        grade = 3.8
+    elif 30 <= total_score < 33:
+        grade = 3.5
+    elif 27 <= total_score < 30:
+        grade = 3.2
+    elif 24 <= total_score < 27:
+        grade = 2.9
+    elif 21 <= total_score < 24:
+        grade = 2.6
+    elif 18 <= total_score < 21:
+        grade = 2.3
+    elif 15 <= total_score < 18:
+        grade = 2.0
+    elif 12 <= total_score < 15:
+        grade = 1.7
+    elif 9 <= total_score < 12:
+        grade = 1.4
     else:
-        grade = '1'
+        grade = 1.0
+
 
     test1.append(test1_score)
     test2.append(test2_score)

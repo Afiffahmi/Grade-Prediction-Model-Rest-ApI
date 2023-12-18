@@ -36,19 +36,30 @@ class Predict(Resource):
 
         if 0 <= out['Prediction'] < 0.5:
             out['Prediction'] = 'F' 
-        elif 0.5 <= out['Prediction'] < 1.5:
+        elif 0.5 <= out['Prediction'] < 1.0:
+            out['Prediction'] = 'F+' 
+        elif 1.0 <= out['Prediction'] < 1.5:
+            out['Prediction'] = 'D-' 
+        elif 1.5 <= out['Prediction'] < 2.0:
             out['Prediction'] = 'D' 
-        elif 1.5 <= out['Prediction'] < 2.5:
-            out['Prediction'] = 'D'
-        elif 2.5 <= out['Prediction'] < 3.5:
-            out['Prediction'] = 'B'
-        elif 3.5 <= out['Prediction'] < 4.5:
-            out['Prediction'] = 'B'
-        elif 4.5 <= out['Prediction'] < 5:
+        elif 2.0 <= out['Prediction'] < 2.5:
+            out['Prediction'] = 'D+' 
+        elif 2.5 <= out['Prediction'] < 3.0:
+            out['Prediction'] = 'C-' 
+        elif 3.0 <= out['Prediction'] < 3.5:
+            out['Prediction'] = 'C' 
+        elif 3.5 <= out['Prediction'] < 4.0:
+            out['Prediction'] = 'C+' 
+        elif 4.0 <= out['Prediction'] < 4.5:
+            out['Prediction'] = 'B-' 
+        elif 4.5 <= out['Prediction'] < 5.0:
+            out['Prediction'] = 'B' 
+        elif out['Prediction'] == 5.0:
             out['Prediction'] = 'A'
 
 
-        return ({'Prediction': out}), 200
+
+        return ({'Prediction': out['Prediction']}), 200
 
 
 API.add_resource(Predict, '/predict')
