@@ -22,6 +22,8 @@ class Predict(Resource):
 
         predictions = []
         for entry in data:
+                # Extract student ID from entry
+            student_id = entry.pop('student_id', None)
             X_new = np.fromiter(entry.values(), dtype=float)  # convert input to array
 
             # Predict for each entry
@@ -30,35 +32,27 @@ class Predict(Resource):
             # Map prediction value to grade
             grade = map_prediction_to_grade(prediction_value)
 
-            predictions.append({'Input': entry, 'Prediction': grade,'predictionvalue': prediction_value})  # Include input data in response
+            predictions.append({'Student ID': student_id,'Input': entry, 'Prediction': grade,'predictionvalue': prediction_value})  # Include input data in response
 
         return {'Predictions': predictions}, 200
 
 def map_prediction_to_grade(prediction):
-        if 0 <= prediction < 0.5:
-            return 'F' 
-        elif 0.5 <= prediction < 1.0:
-            return 'F+' 
-        elif 1.0 <= prediction < 1.3:
-            return 'D-' 
-        elif 1.3 <= prediction < 1.7:
-            return 'D' 
-        elif 1.7 <= prediction < 2.0:
-            return 'D+' 
-        elif 2.0 <= prediction < 2.3:
-            return 'C' 
-        elif 2.3 <= prediction < 2.7:
-            return 'C+' 
+        if 2.3 <= prediction < 2.7:
+            return 'F'
         elif 2.7 <= prediction < 3.0:
-            return 'B-' 
-        elif 3.0 <= prediction < 3.3:
-            return 'B' 
-        elif 3.3 <= prediction < 3.5:
-            return 'B+' 
-        elif 3.5 <= prediction < 3.7:
+            return 'C+'
+        elif 3.0 <= prediction < 3.1:
+            return 'B-'
+        elif 3.1 <= prediction < 3.4:
+            return 'B'
+        elif 3.4 <= prediction < 3.5:
+            return 'B+'
+        elif 3.5 <= prediction < 3.55:
             return 'A-'
-        elif 3.7 <= prediction < 4.0:
-            return 'A' 
+        elif 3.55 <= prediction < 3.7:
+            return 'A'
+        elif 3.7 <= prediction:
+            return 'A+'
         
 
      
