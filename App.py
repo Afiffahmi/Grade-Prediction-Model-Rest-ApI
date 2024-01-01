@@ -6,7 +6,7 @@ from flask_cors import CORS
 
 
 APP = Flask(__name__)
-CORS(APP, resources={r"/*": {"origins": "http://localhost:3000"}})
+CORS(APP)
 API = Api(APP)
 
  ##loading the model from the saved file
@@ -55,11 +55,15 @@ def map_prediction_to_grade(prediction):
             return 'A+'
         
 
-     
+ @APP.route('/')
+def index():
+    return "Hello, World!"    
 
 
 API.add_resource(Predict, '/predict')
 
-if __name__ == '__main__':
 
+
+
+if __name__ == '__main__':
     APP.run(debug=True, port='1080')
