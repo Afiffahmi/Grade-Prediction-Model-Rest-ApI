@@ -55,7 +55,7 @@ def map_prediction_to_grade(prediction):
             return 'A+'
         
 
- @APP.route('/')
+@APP.route('/')
 def index():
     return "Hello, World!"    
 
