@@ -10,7 +10,7 @@ import pickle
 random.seed(0)
 
 # Define the number of rows you want in your dataset
-num_rows = 140
+num_rows = 300
 
 # Create empty lists to store data
 gender = []

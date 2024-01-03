@@ -37,22 +37,23 @@ class Predict(Resource):
         return {'Predictions': predictions}, 200
 
 def map_prediction_to_grade(prediction):
-        if 2.3 <= prediction < 2.7:
+        if prediction < 2.7:
             return 'F'
         elif 2.7 <= prediction < 3.0:
             return 'C+'
-        elif 3.0 <= prediction < 3.1:
+        elif 3.0 <= prediction < 3.15:
             return 'B-'
-        elif 3.1 <= prediction < 3.4:
+        elif 3.15 <= prediction < 3.45:
             return 'B'
-        elif 3.4 <= prediction < 3.5:
+        elif 3.45 <= prediction < 3.55:
             return 'B+'
-        elif 3.5 <= prediction < 3.55:
+        elif 3.55 <= prediction < 3.65:
             return 'A-'
-        elif 3.55 <= prediction < 3.7:
+        elif 3.65 <= prediction < 3.75:
             return 'A'
-        elif 3.7 <= prediction:
+        elif 3.75 <= prediction:
             return 'A+'
+        
         
 
 @APP.route('/')
