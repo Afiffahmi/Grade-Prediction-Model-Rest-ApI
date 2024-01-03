@@ -39,19 +39,23 @@ class Predict(Resource):
 def map_prediction_to_grade(prediction):
         if prediction < 2.7:
             return 'F'
-        elif 2.7 <= prediction < 3.0:
+        elif 2.7 <= prediction < 2.85:
+             return 'C-'
+        elif 2.85 <= prediction < 3.4:
+            return 'C'
+        elif 3.4 <= prediction < 3.55:
             return 'C+'
-        elif 3.0 <= prediction < 3.15:
+        elif 3.55 <= prediction < 3.7:
             return 'B-'
-        elif 3.15 <= prediction < 3.45:
+        elif 3.7 <= prediction < 3.9:
             return 'B'
-        elif 3.45 <= prediction < 3.55:
+        elif 3.9 <= prediction < 4.0:
             return 'B+'
-        elif 3.55 <= prediction < 3.65:
+        elif 4.0 <= prediction < 4.05:
             return 'A-'
-        elif 3.65 <= prediction < 3.75:
+        elif 4.05 <= prediction < 4.15:
             return 'A'
-        elif 3.75 <= prediction:
+        elif 4.15 <= prediction:
             return 'A+'
         
         
