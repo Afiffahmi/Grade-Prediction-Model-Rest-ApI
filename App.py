@@ -64,11 +64,7 @@ def map_prediction_to_grade(prediction):
 def index():
     return "Hello, World!"    
 
-
 API.add_resource(Predict, '/predict')
-
-
-
 
 if __name__ == '__main__':
     APP.run(debug=True, port='1080')
